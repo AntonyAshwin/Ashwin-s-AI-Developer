@@ -1,0 +1,1 @@
+1:33 : more users on mobile, mobile comaptible and desktop compatible both at the same time costs too many takens, keeping it online mobile compatible
