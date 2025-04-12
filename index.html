@@ -52,7 +52,7 @@
 </head>
 <body>
     <form id="promptForm">
-        <label for="userPrompt">What do you want your app to do ? </label>
+        <label for="userPrompt">What do you want your app to do?</label>
         <textarea id="userPrompt" name="userPrompt" rows="4" required></textarea>
         <button type="submit">Submit</button>
     </form>
@@ -61,8 +61,24 @@
     <script>
         document.getElementById('promptForm').addEventListener('submit', function(event) {
             event.preventDefault();
+
             const userPrompt = document.getElementById('userPrompt').value;
-            document.getElementById('output').textContent = `You entered: ${userPrompt}`;
+
+            fetch('http://localhost:3000/create', { // Explicitly use localhost:3000
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: userPrompt }),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('output').textContent = data.message;
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    document.getElementById('output').textContent = 'An error occurred.';
+                });
         });
     </script>
 </body>
