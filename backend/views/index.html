@@ -64,6 +64,27 @@
         #viewButton:hover {
             background-color: #218838;
         }
+
+        /* Loading spinner styles */
+        #loadingSpinner {
+            display: none;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007BFF;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -72,6 +93,7 @@
         <textarea id="userPrompt" name="userPrompt" rows="4" required></textarea>
         <button type="submit">Submit</button>
     </form>
+    <div id="loadingSpinner"></div>
     <p id="output"></p>
     <button id="viewButton">View Generated Application</button>
 
@@ -80,6 +102,14 @@
             event.preventDefault();
 
             const userPrompt = document.getElementById('userPrompt').value;
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const output = document.getElementById('output');
+            const viewButton = document.getElementById('viewButton');
+
+            // Show the loading spinner and hide output and button
+            loadingSpinner.style.display = 'block';
+            output.textContent = '';
+            viewButton.style.display = 'none';
 
             fetch('http://localhost:3000/create', {
                 method: 'POST', 
@@ -91,10 +121,10 @@
                 .then(res => res.json())
                 .then(data => {
                     const fileUrl = data.fileUrl;
-                    const output = document.getElementById('output');
-                    const viewButton = document.getElementById('viewButton');
 
-    
+     
+                    loadingSpinner.style.display = 'none';
+                
                     viewButton.style.display = 'block';
                     viewButton.onclick = () => {
                         window.open(fileUrl, '_blank');
@@ -102,7 +132,10 @@
                 })
                 .catch(err => {
                     console.error('Error:', err);
-                    document.getElementById('output').textContent = 'An error occurred.';
+
+                
+                    loadingSpinner.style.display = 'none';
+                    output.textContent = 'An error occurred.';
                 });
         });
     </script>
