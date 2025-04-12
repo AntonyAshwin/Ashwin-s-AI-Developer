@@ -25,7 +25,7 @@ app.post('/create', async (req, res) => {
     }
 
     // Format the prompt into the required sentence
-    const formattedPrompt = `Generate the HTML content for a ${prompt}. Please provide only the raw HTML code, starting with the <!DOCTYPE html> tag and ending with the </html> tag. Do not include any surrounding text, explanations, or code blocks.`;
+    const formattedPrompt = `Generate the HTML content for a ${prompt}, ensuring it is mobile-friendly. Please provide only the raw HTML code, starting with the <!DOCTYPE html> tag and ending with the </html> tag. Include a responsive viewport setting and consider basic mobile layout principles. Do not include any surrounding text, explanations, or code blocks.`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.API_KEY}`, {
