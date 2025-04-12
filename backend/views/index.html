@@ -48,6 +48,22 @@
             margin-top: 20px;
             font-size: 16px;
         }
+
+        #viewButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #viewButton:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -57,6 +73,7 @@
         <button type="submit">Submit</button>
     </form>
     <p id="output"></p>
+    <button id="viewButton">View Generated Application</button>
 
     <script>
         document.getElementById('promptForm').addEventListener('submit', function(event) {
@@ -75,9 +92,13 @@
                 .then(data => {
                     const fileUrl = data.fileUrl;
                     const output = document.getElementById('output');
-                    
-        
-                    output.innerHTML = `${fileUrl}`;
+                    const viewButton = document.getElementById('viewButton');
+
+    
+                    viewButton.style.display = 'block';
+                    viewButton.onclick = () => {
+                        window.open(fileUrl, '_blank');
+                    };
                 })
                 .catch(err => {
                     console.error('Error:', err);
