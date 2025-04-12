@@ -47,6 +47,7 @@
         #output {
             margin-top: 20px;
             font-size: 16px;
+            text-align: center;
         }
 
         #viewButton {
@@ -59,6 +60,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            align-self: center;
         }
 
         #viewButton:hover {
@@ -85,6 +87,14 @@
                 transform: rotate(360deg);
             }
         }
+
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -93,9 +103,11 @@
         <textarea id="userPrompt" name="userPrompt" rows="4" required></textarea>
         <button type="submit">Submit</button>
     </form>
-    <div id="loadingSpinner"></div>
-    <p id="output"></p>
-    <button id="viewButton">View Generated Application</button>
+    <div class="center-container">
+        <div id="loadingSpinner"></div>
+        <p id="output"></p>
+        <button id="viewButton">View Generated Application</button>
+    </div>
 
     <script>
         document.getElementById('promptForm').addEventListener('submit', function(event) {
@@ -122,9 +134,8 @@
                 .then(data => {
                     const fileUrl = data.fileUrl;
 
-     
                     loadingSpinner.style.display = 'none';
-                
+
                     viewButton.style.display = 'block';
                     viewButton.onclick = () => {
                         window.open(fileUrl, '_blank');
@@ -132,8 +143,6 @@
                 })
                 .catch(err => {
                     console.error('Error:', err);
-
-                
                     loadingSpinner.style.display = 'none';
                     output.textContent = 'An error occurred.';
                 });
