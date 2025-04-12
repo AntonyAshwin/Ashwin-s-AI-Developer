@@ -110,6 +110,18 @@
     </div>
 
     <script>
+        let baseUrl = '';
+
+        // Fetch the base URL from the backend
+        fetch('/config')
+            .then(res => res.json())
+            .then(config => {
+                baseUrl = config.baseUrl;
+            })
+            .catch(err => {
+                console.error('Error fetching base URL:', err);
+            });
+
         document.getElementById('promptForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -123,7 +135,7 @@
             output.textContent = '';
             viewButton.style.display = 'none';
 
-            fetch('http://localhost:3000/create', {
+            fetch(`${baseUrl}/create`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',

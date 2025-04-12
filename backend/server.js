@@ -6,7 +6,8 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000; // Use PORT from .env or default to 3000
+const BASE_URL = process.env.BASE_URL || `http://localhost`; // Use BASE_URL from .env or default to localhost
 
 app.use(bodyParser.json({ limit: '10mb' })); 
 app.use(cors());
@@ -58,7 +59,7 @@ app.post('/create', async (req, res) => {
             console.log(`${filePath}`);
 
             // Return only the file URL
-            const fileUrl = `http://localhost:${PORT}/apps/${randomFileName}`;
+            const fileUrl = `${BASE_URL}:${PORT}/apps/${randomFileName}`;
             res.json({ fileUrl });
         });
     } catch (error) {
@@ -80,6 +81,10 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/config', (req, res) => {
+    res.json({ baseUrl: `${BASE_URL}:${PORT}` });
+});
+
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on ${BASE_URL}:${PORT}`);
 });
