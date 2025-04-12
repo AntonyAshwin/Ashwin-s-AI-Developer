@@ -13,7 +13,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(cors());
 
 app.post('/create', async (req, res) => {
-    const fetch = (await import('node-fetch')).default; 
+    const fetch = (await import('node-fetch')).default;
 
     console.log('Request Method:', req.method);
     console.log('Request Body:', req.body);
@@ -45,23 +45,11 @@ app.post('/create', async (req, res) => {
             return res.status(500).json({ error: 'Failed to extract HTML content from the API response' });
         }
 
+        // Clean the HTML content
         htmlContent = htmlContent.replace(/```html/g, '').replace(/```/g, '').trim();
 
-        const randomFileName = `file_${Date.now()}.html`;
-        const filePath = path.join(__dirname, 'apps', randomFileName);
-
-        fs.writeFile(filePath, htmlContent, (err) => {
-            if (err) {
-                console.error('Error writing file:', err);
-                return res.status(500).json({ error: 'Failed to create file' });
-            }
-
-            console.log(`${filePath}`);
-
-            // Return only the file URL
-            const fileUrl = `${BASE_URL}:${PORT}/apps/${randomFileName}`;
-            res.json({ fileUrl });
-        });
+        // Send the HTML content directly as the response
+        res.send(htmlContent);
     } catch (error) {
         console.error('Error communicating with the external API:', error);
         res.status(500).json({ error: 'Failed to fetch data from the external API' });

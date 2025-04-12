@@ -53,30 +53,6 @@
             background-color: #c82333;
         }
 
-        #output {
-            margin-top: 20px;
-            font-size: 16px;
-            text-align: center;
-        }
-
-        #viewButton {
-            display: none;
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            align-self: center;
-        }
-
-        #viewButton:hover {
-            background-color: #218838;
-        }
-
-        /* Loading spinner styles */
         #loadingSpinner {
             display: none;
             margin: 20px auto;
@@ -96,14 +72,6 @@
                 transform: rotate(360deg);
             }
         }
-
-        .center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -113,11 +81,7 @@
         <button type="submit">Submit</button>
         <button type="button" id="clearButton">Clear</button>
     </form>
-    <div class="center-container">
-        <div id="loadingSpinner"></div>
-        <p id="output"></p>
-        <button id="viewButton">View Generated Application</button>
-    </div>
+    <div id="loadingSpinner"></div>
 
     <script>
         let baseUrl = '';
@@ -137,43 +101,36 @@
 
             const userPrompt = document.getElementById('userPrompt').value;
             const loadingSpinner = document.getElementById('loadingSpinner');
-            const output = document.getElementById('output');
-            const viewButton = document.getElementById('viewButton');
 
-            // Show the loading spinner and hide output and button
+            // Show the loading spinner
             loadingSpinner.style.display = 'block';
-            output.textContent = '';
-            viewButton.style.display = 'none';
 
-            fetch(`${baseUrl}/create`, {
-                method: 'POST', 
+            fetch('/create', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ prompt: userPrompt }),
             })
-                .then(res => res.json())
-                .then(data => {
-                    const fileUrl = data.fileUrl;
-
+                .then(res => res.text())
+                .then(htmlContent => {
+                    // Hide the loading spinner
                     loadingSpinner.style.display = 'none';
 
-                    viewButton.style.display = 'block';
-                    viewButton.onclick = () => {
-                        window.open(fileUrl, '_blank');
-                    };
+                    // Replace the entire document with the new HTML content
+                    document.open();
+                    document.write(htmlContent);
+                    document.close();
                 })
                 .catch(err => {
                     console.error('Error:', err);
                     loadingSpinner.style.display = 'none';
-                    output.textContent = 'An error occurred.';
+                    alert('An error occurred while generating the HTML.');
                 });
         });
 
         document.getElementById('clearButton').addEventListener('click', function() {
             document.getElementById('userPrompt').value = '';
-            document.getElementById('output').textContent = '';
-            document.getElementById('viewButton').style.display = 'none';
         });
     </script>
 </body>
