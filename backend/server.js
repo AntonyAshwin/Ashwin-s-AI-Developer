@@ -8,10 +8,8 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-
 app.use(bodyParser.json({ limit: '10mb' })); 
 app.use(cors());
-
 
 app.post('/create', async (req, res) => {
     const fetch = (await import('node-fetch')).default; 
@@ -24,7 +22,6 @@ app.post('/create', async (req, res) => {
         return res.status(400).json({ error: 'Prompt is required' });
     }
 
-    
     const formattedPrompt = `Generate the HTML content for a ${prompt}, ensuring it is mobile-friendly. Please provide only the raw HTML code, starting with the <!DOCTYPE html> tag and ending with the </html> tag. Include a responsive viewport setting and consider basic mobile layout principles. Do not include any surrounding text, explanations, or code blocks.`;
 
     try {
@@ -42,30 +39,27 @@ app.post('/create', async (req, res) => {
 
         const data = await response.json();
 
-        
         let htmlContent = data.candidates[0]?.content?.parts[0]?.text;
         if (!htmlContent) {
             return res.status(500).json({ error: 'Failed to extract HTML content from the API response' });
         }
 
-        
         htmlContent = htmlContent.replace(/```html/g, '').replace(/```/g, '').trim();
 
-    
         const randomFileName = `file_${Date.now()}.html`;
-
-       
         const filePath = path.join(__dirname, 'apps', randomFileName);
 
-       
         fs.writeFile(filePath, htmlContent, (err) => {
             if (err) {
                 console.error('Error writing file:', err);
                 return res.status(500).json({ error: 'Failed to create file' });
             }
 
-            console.log(`File created: ${filePath}`);
-            res.json({ message: `File created successfully: ${randomFileName}`, filePath });
+            console.log(`${filePath}`);
+
+            // Return only the file URL
+            const fileUrl = `http://localhost:${PORT}/apps/${randomFileName}`;
+            res.json({ fileUrl });
         });
     } catch (error) {
         console.error('Error communicating with the external API:', error);
@@ -73,7 +67,8 @@ app.post('/create', async (req, res) => {
     }
 });
 
-
+// Serve static files from the apps directory
+app.use('/apps', express.static(path.join(__dirname, 'apps')));
 
 app.get('/', (req, res) => {
     const indexPath = path.join(__dirname, 'views', 'index.html');
@@ -84,7 +79,6 @@ app.get('/', (req, res) => {
         }
     });
 });
-
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

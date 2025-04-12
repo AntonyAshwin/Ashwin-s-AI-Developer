@@ -64,7 +64,7 @@
 
             const userPrompt = document.getElementById('userPrompt').value;
 
-            fetch('http://localhost:3000/create', { // Explicitly use localhost:3000
+            fetch('http://localhost:3000/create', {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +73,11 @@
             })
                 .then(res => res.json())
                 .then(data => {
-                    document.getElementById('output').textContent = data.message;
+                    const fileUrl = data.fileUrl;
+                    const output = document.getElementById('output');
+                    
+        
+                    output.innerHTML = `${fileUrl}`;
                 })
                 .catch(err => {
                     console.error('Error:', err);
