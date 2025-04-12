@@ -38,10 +38,19 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
 
         button:hover {
             background-color: #0056b3;
+        }
+
+        #clearButton {
+            background-color: #dc3545;
+        }
+
+        #clearButton:hover {
+            background-color: #c82333;
         }
 
         #output {
@@ -102,6 +111,7 @@
         <label for="userPrompt">What do you want your app to do?</label>
         <textarea id="userPrompt" name="userPrompt" rows="4" required></textarea>
         <button type="submit">Submit</button>
+        <button type="button" id="clearButton">Clear</button>
     </form>
     <div class="center-container">
         <div id="loadingSpinner"></div>
@@ -158,6 +168,12 @@
                     loadingSpinner.style.display = 'none';
                     output.textContent = 'An error occurred.';
                 });
+        });
+
+        document.getElementById('clearButton').addEventListener('click', function() {
+            document.getElementById('userPrompt').value = '';
+            document.getElementById('output').textContent = '';
+            document.getElementById('viewButton').style.display = 'none';
         });
     </script>
 </body>
