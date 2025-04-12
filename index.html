@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Input Prompt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        #userPrompt {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #output {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <form id="promptForm">
+        <label for="userPrompt">What do you want your app to do ? </label>
+        <textarea id="userPrompt" name="userPrompt" rows="4" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="output"></p>
+
+    <script>
+        document.getElementById('promptForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userPrompt = document.getElementById('userPrompt').value;
+            document.getElementById('output').textContent = `You entered: ${userPrompt}`;
+        });
+    </script>
+</body>
+</html>
